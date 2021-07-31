@@ -6,8 +6,28 @@ import 'package:birthday_remainder/Widgets/wish_list.dart';
 import 'package:birthday_remainder/models/wish.dart';
 import 'package:provider/provider.dart';
 import 'package:birthday_remainder/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RemaindersScreen extends StatelessWidget {
+class RemaindersScreen extends StatefulWidget {
+
+
+  @override
+  _RemaindersScreenState createState() => _RemaindersScreenState();
+}
+
+class _RemaindersScreenState extends State<RemaindersScreen> {
+
+  SharedPreferences sharedPreferences;
+  @override
+  void initState() {
+    loadSharedPreferencesAndData();
+    super.initState();
+  }
+
+  void loadSharedPreferencesAndData() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    Provider.of<WishData>(context,listen:false).loadData(sharedPreferences);
+  }
 
   @override
   Widget build(BuildContext context) {
