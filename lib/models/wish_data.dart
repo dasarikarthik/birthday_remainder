@@ -39,7 +39,9 @@ class WishData extends ChangeNotifier{
   void loadData(SharedPreferences sharedPreferences){
     sp=sharedPreferences;
     List<String> spList=sharedPreferences.getStringList('wishs');
-    _wishs=spList.map((wish) => Wish.fromMap(jsonDecode(wish))).toList();
+    if(spList != null) {
+      _wishs = spList.map((wish) => Wish.fromMap(jsonDecode(wish))).toList();
+    }
     notifyListeners();
   }
 }
