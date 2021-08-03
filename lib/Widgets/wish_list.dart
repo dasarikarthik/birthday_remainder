@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:birthday_remainder/Widgets/wish_tile.dart';
-import 'package:birthday_remainder/models/wish.dart';
 import 'package:provider/provider.dart';
 import 'package:birthday_remainder/models/wish_data.dart';
 

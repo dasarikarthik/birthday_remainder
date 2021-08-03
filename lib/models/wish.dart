@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 
 class Wish{
   final String name;

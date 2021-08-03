@@ -3,10 +3,9 @@ import 'package:birthday_remainder/models/wish_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:birthday_remainder/Widgets/wish_list.dart';
-import 'package:birthday_remainder/models/wish.dart';
 import 'package:provider/provider.dart';
-import 'package:birthday_remainder/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:birthday_remainder/services/notification.dart';
 
 class RemaindersScreen extends StatefulWidget {
 
@@ -21,6 +20,7 @@ class _RemaindersScreenState extends State<RemaindersScreen> {
   @override
   void initState() {
     loadSharedPreferencesAndData();
+    Provider.of<NotificationService>(context, listen: false).initialize();
     super.initState();
   }
 
@@ -47,6 +47,7 @@ class _RemaindersScreenState extends State<RemaindersScreen> {
         ),
         onPressed: () {
           //Write code here
+          Provider.of<NotificationService>(context, listen: false).instantNofitication();
           Navigator.push(context, MaterialPageRoute(builder: (context) =>AddWishPage(),
           ));
         },

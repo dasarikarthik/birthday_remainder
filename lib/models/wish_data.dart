@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:collection';
 import 'package:birthday_remainder/models/wish.dart';
-import 'package:birthday_remainder/screens/remainder_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class WishData extends ChangeNotifier{
   SharedPreferences sp;
