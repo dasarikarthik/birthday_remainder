@@ -1,4 +1,3 @@
-
 class Wish{
   final String name;
   final DateTime date;

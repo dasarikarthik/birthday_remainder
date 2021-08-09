@@ -1,14 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:provider/provider.dart';
+ import 'package:birthday_remainder/models/wish_data.dart';
 
-class NotificationService extends ChangeNotifier {
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+
+class NotificationService{
+  static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
+
 
   //initialize
 
-  Future initialize() async {
+   static Future initialize() async {
+    tz.initializeTimeZones();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -27,7 +34,7 @@ class NotificationService extends ChangeNotifier {
   }
 
   //Instant Notifications
-  Future instantNofitication() async {
+  static Future instantNofitication(String name, String matter) async {
     var android = AndroidNotificationDetails("id", "channel", "description");
 
     var ios = IOSNotificationDetails();
@@ -35,9 +42,10 @@ class NotificationService extends ChangeNotifier {
     var platform = new NotificationDetails(android: android, iOS: ios);
 
     await _flutterLocalNotificationsPlugin.show(
-        0, "Demo instant notification", "Tap to do something", platform,
+        0, name, matter, platform,
         payload: "Welcome to demo app");
   }
+
 
   //Image notification
   Future imageNotification() async {
@@ -59,7 +67,7 @@ class NotificationService extends ChangeNotifier {
         payload: "Welcome to demo app");
   }
 
-  //Stylish Notification
+
   Future stylishNotification() async {
     var android = AndroidNotificationDetails("id", "channel", "description",
         color: Colors.deepOrange,
@@ -75,10 +83,28 @@ class NotificationService extends ChangeNotifier {
         0, "Demo Stylish notification", "Tap to do something", platform);
   }
 
-  //Sheduled Notification
 
+  Future<void> scheduleDailyTenAMNotification() async {
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        'daily scheduled notification title',
+        'daily scheduled notification body',
+        _nextInstanceOfTenAM(),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+              'daily notification channel id',
+              'daily notification channel name',
+              'daily notification description'),
+        ),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time);
+  }
+
+  //Sheduled Notification
   Future sheduledNotification() async {
-    var interval = RepeatInterval.everyMinute;
+    var interval = RepeatInterval.daily;
     var bigPicture = BigPictureStyleInformation(
         DrawableResourceAndroidBitmap("app_icon"),
         largeIcon: DrawableResourceAndroidBitmap("app_icon"),
@@ -91,13 +117,25 @@ class NotificationService extends ChangeNotifier {
         styleInformation: bigPicture);
 
     var platform = new NotificationDetails(android: android);
-
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        "Demo Sheduled notification",
-        "Tap to do something",
-        interval,
-        platform);
+        'scheduled title',
+        'scheduled body',
+        tz.TZDateTime.now(tz.local).toLocal(),
+        const NotificationDetails(
+            android: AndroidNotificationDetails('your channel id',
+                'your channel name', 'your channel description')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.absoluteTime);
+    //Stylish Notification
+
+    // await _flutterLocalNotificationsPlugin.periodicallyShow(
+    //     0,
+    //     "Demo Sheduled notification",
+    //     "Tap to do something",
+    //     interval,
+    //     platform);
   }
 
   //Cancel notification
@@ -105,4 +143,13 @@ class NotificationService extends ChangeNotifier {
   Future cancelNotification() async {
     await _flutterLocalNotificationsPlugin.cancelAll();
   }
+}
+tz.TZDateTime _nextInstanceOfTenAM() {
+  final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+  tz.TZDateTime scheduledDate =
+  tz.TZDateTime(tz.local, now.year, now.month, now.day, 21);
+  if (scheduledDate.isBefore(now)) {
+    scheduledDate = scheduledDate.add(const Duration(days: 1));
+  }
+  return scheduledDate;
 }

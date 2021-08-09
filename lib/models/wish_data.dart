@@ -5,6 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'dart:collection';
 import 'package:birthday_remainder/models/wish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:birthday_remainder/services/notification.dart';
+
+
+
 class WishData extends ChangeNotifier{
   SharedPreferences sp;
   List<Wish> _wishs=[
@@ -28,6 +32,7 @@ class WishData extends ChangeNotifier{
     notifyListeners();
     saveData();
   }
+  void dummy(){}
 
   void saveData(){
     List<String> spList=_wishs.map((wish)=>jsonEncode(wish.toMap())).toList();
@@ -41,6 +46,23 @@ class WishData extends ChangeNotifier{
     if(spList != null) {
       _wishs = spList.map((wish) => Wish.fromMap(jsonDecode(wish))).toList();
     }
+    notifyListeners();
+  }
+  void search() {
+    _wishs.forEach((wish) {
+      if(wish.date.month==DateTime.now().month){
+       if(wish.date.day==DateTime.now().day){
+        NotificationService.instantNofitication(wish.name,"Today is ${wish.name} birthday, make their birthday memorable");
+       }
+       else if(wish.date.day==DateTime.now().day+1) {
+         NotificationService.instantNofitication(wish.name,"Tomorrow is ${wish.name} birthday, make their birthday memorable");
+
+       }
+      }
+      else{
+
+      }
+    });
     notifyListeners();
   }
 }
