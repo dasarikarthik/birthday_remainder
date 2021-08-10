@@ -6,6 +6,7 @@ import 'dart:collection';
 import 'package:birthday_remainder/models/wish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:birthday_remainder/services/notification.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 
@@ -49,20 +50,6 @@ class WishData extends ChangeNotifier{
     notifyListeners();
   }
   void search() {
-    _wishs.forEach((wish) {
-      if(wish.date.month==DateTime.now().month){
-       if(wish.date.day==DateTime.now().day){
-        NotificationService.instantNofitication(wish.name,"Today is ${wish.name} birthday, make their birthday memorable");
-       }
-       else if(wish.date.day==DateTime.now().day+1) {
-         NotificationService.instantNofitication(wish.name,"Tomorrow is ${wish.name} birthday, make their birthday memorable");
 
-       }
-      }
-      else{
-
-      }
-    });
-    notifyListeners();
   }
 }
