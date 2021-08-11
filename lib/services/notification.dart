@@ -26,15 +26,17 @@ class NotificationService {
   }
 
   //Instant Notifications
-  Future instantNofitication(String name,String matter) async {
-    var android = AndroidNotificationDetails("id", "channel", "description");
+  Future instantNofitication(int id,String name,String matter) async {
+    var android = AndroidNotificationDetails(
+        "id", "BirthdayRemainder", "BirthdayRemainder",styleInformation: BigTextStyleInformation(''),
+    );
 
     var ios = IOSNotificationDetails();
 
     var platform = new NotificationDetails(android: android, iOS: ios);
 
     await _flutterLocalNotificationsPlugin.show(
-        0, name, matter, platform,
+        id, name, matter, platform,
         payload: "Welcome to demo app");
   }
 

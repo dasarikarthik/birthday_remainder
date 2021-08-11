@@ -13,23 +13,20 @@ const myTask = "syncWithTheBackEnd";
 void  callbackDispatcher(){
 Workmanager.executeTask((taskName, inputData) async {
   final prefs=await SharedPreferences.getInstance();
-//show the notification
-// NotificationService.instantNofitication("ThankYou","ThankYou for installing our App");
-// Provider.of<WishData>(,listen:false).search();
   WishData().loadData(prefs);
-
   List<String> spList=prefs.getStringList('wishs');
   List<Wish> wishes;
   if(spList != null) {
     wishes = spList.map((wish) => Wish.fromMap(jsonDecode(wish))).toList();
   }
-  wishes.forEach((wish) {
+  // var id=0;
+  wishes.asMap().forEach((index,wish) {
     if(wish.date.month==DateTime.now().month){
       if(wish.date.day==DateTime.now().day){
-        NotificationService().instantNofitication(wish.name,"Today is ${wish.name} birthday, make their birthday memorable");
+        NotificationService().instantNofitication(index,wish.name,"Today is ${wish.name}'s birthday, make their birthday memorable");
       }
       else if(wish.date.day==DateTime.now().day+1) {
-        NotificationService().instantNofitication(wish.name,"Tomorrow is ${wish.name} birthday, make their birthday memorable");
+        NotificationService().instantNofitication(index,wish.name,"Tomorrow is ${wish.name}'s birthday, make their birthday memorable");
 
       }
     }
@@ -48,13 +45,8 @@ void main() async {
   await Workmanager.initialize(callbackDispatcher);
   await Workmanager.registerPeriodicTask(
     "2",
-    // use the same task name used in callbackDispatcher function for identifying the task
-    // Each task must have a unique name if you want to add multiple tasks;
     myTask,
-    // When no frequency is provided the default 15 minutes is set.
-    // Minimum frequency is 15 min.
-    // Android will automatically change your frequency to 15 min if you have configured a lower frequency than 15 minutes.
-    frequency: Duration(minutes: 15), // change duration according to your needs
+    frequency: Duration(hours: 12), // change duration according to your needs
   );
   runApp(MyApp());
 

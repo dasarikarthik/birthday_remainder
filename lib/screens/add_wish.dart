@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:birthday_remainder/models/wish.dart';
 import 'package:provider/provider.dart';
 import 'package:birthday_remainder/models/wish_data.dart';
 
@@ -30,7 +29,7 @@ class _AddWishPageState extends State<AddWishPage> {
       });
     }
   }
-
+  String exception='';
   String getText(){
     if(date==null){
       return "Select Date";
@@ -53,8 +52,15 @@ class _AddWishPageState extends State<AddWishPage> {
           Icons.check,
         ),
         onPressed: (){
+          if(date==null||newWishName==null){
+            setState(() {
+              exception="Please Enter all fields";
+            });
+          }
+          else{
           Provider.of<WishData>(context,listen:false).addWish(newWishName, date);
           Navigator.pop(context);
+          }
 
         },
       ),
@@ -81,6 +87,19 @@ class _AddWishPageState extends State<AddWishPage> {
                     getText(),
                 )
             ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Center(
+              child: Text(
+                exception,
+                style: TextStyle(
+                  color: Colors.red,
+                  
+                ),
+                 
+              ),
+            )
 
           ],
         ),

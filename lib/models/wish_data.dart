@@ -5,16 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'dart:collection';
 import 'package:birthday_remainder/models/wish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:birthday_remainder/services/notification.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 
 class WishData extends ChangeNotifier{
   SharedPreferences sp;
   List<Wish> _wishs=[
-    Wish(name: "karthik",date: DateTime.now()),
-    Wish(name: "karthik",date: DateTime.now()),
+    Wish(name: "Thanks for installing our APP",date: DateTime.now()),
 
   ];
   UnmodifiableListView<Wish> get wishs{

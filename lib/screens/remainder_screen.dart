@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:birthday_remainder/screens/add_wish.dart';
 import 'package:birthday_remainder/models/wish_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,9 +42,6 @@ class _RemaindersScreenState extends State<RemaindersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Text(
-          '${Provider.of<WishData>(context).wishs.length} wishs',
-        ),
         backgroundColor: Color(0xff39A2DB),
         title: Text("Birthday Wisher"),
         centerTitle: true,
